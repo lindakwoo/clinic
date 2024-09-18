@@ -3,11 +3,14 @@ from django.http import HttpResponse
 from common.json import ModelEncoder
 from django.http import JsonResponse
 from twilio.rest import Client
-from django.conf import settings
 from django.views.decorators.http import require_http_methods
 import json
 import logging
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def shorten_url(url):
@@ -19,10 +22,10 @@ def shorten_url(url):
 
 logger = logging.getLogger(__name__)
 
-TWILIO_ACCOUNT_SID = settings.TWILIO_ACCOUNT_SID
-TWILIO_AUTH_TOKEN = settings.TWILIO_AUTH_TOKEN
-TWILIO_MESSAGING_SERVICE_SID = settings.TWILIO_MESSAGING_SERVICE_SID
-TWILIO_PHONE_NUMBER = settings.TWILIO_PHONE_NUMBER
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_MESSAGING_SERVICE_SID = os.getenv("TWILIO_MESSAGING_SERVICE_SID")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
 
 twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
