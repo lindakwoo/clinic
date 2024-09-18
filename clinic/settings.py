@@ -72,8 +72,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://fruity-chicken-spend.loca.lt"
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_CREDENTIALS = True
 
 DJWTO_MODE = "TWO-COOKIES"
