@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +30,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
+    "corsheaders",
     "clinic_app.apps.ClinicAppConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -53,23 +54,23 @@ ALLOWED_HOSTS = [
     "localhost",
     "service-api",
     "42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app"
-    "fruity-chicken-spend.loca.lt"
+    "fruity-chicken-spend.loca.lt",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://2ede-2601-645-e88-7990-4df5-651b-55d6-a0a7.ngrok-free.app",
     "https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app"
-    "https://fruity-chicken-spend.loca.lt"
+    "https://fruity-chicken-spend.loca.lt",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
-     "http://localhost:5173",
+    "http://localhost:5173",
     "https://2ede-2601-645-e88-7990-4df5-651b-55d6-a0a7.ngrok-free.app",
     "https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app",
-    "https://fruity-chicken-spend.loca.lt"
+    "https://fruity-chicken-spend.loca.lt",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -144,7 +145,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 # STATIC_ROOT = '/usr/src/app/staticfiles'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
