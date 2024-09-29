@@ -1,5 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 
 # Create your models here.
 
@@ -30,3 +31,15 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"Appointment for {self.patient} with {self.therapist} on {self.date} at {self.time}"
+
+    @property
+    def datetime(self):
+        # Combine date and time into a single timezone-aware datetime object
+        naive_datetime = timezone.datetime.combine(self.date, self.time)
+        return timezone.make_aware(naive_datetime, timezone.get_current_timezone())
+
+    def display_datetime(self):
+        # Return a formatted string of the datetime for admin display
+        return self.datetime.strftime("%Y-%m-%d %H:%M:%S") if self.date and self.time else "Not set"
+
+    display_datetime.short_description = "Appointment Date & Time"  # This will set the column header in admin

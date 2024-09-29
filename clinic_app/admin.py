@@ -15,4 +15,4 @@ class TherapistAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class Appointment(admin.ModelAdmin):
-    list_display = ["id", "patient", "therapist", "date", "time"]
+    list_display = ["id", "patient", "therapist", "display_datetime"]
