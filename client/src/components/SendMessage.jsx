@@ -55,11 +55,11 @@ const SendMessage = () => {
             </Typography>
             <TextField
               fullWidth
-              label='Message'
               multiline
               rows={4}
               variant='outlined'
               value={message}
+              placeholder='Example: "I am running late...be there in 10 minutes."'
               onChange={(e) => setMessage(e.target.value)}
               margin='normal'
             />

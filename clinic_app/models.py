@@ -22,13 +22,6 @@ class Therapist(models.Model):
         return self.last_name
 
 
-class Session(models.Model):
-    patient_phone = PhoneNumberField(null=True, blank=True)
-    doctor_phone = PhoneNumberField(null=True, blank=True)
-    message_sid = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE)

@@ -38,7 +38,10 @@ class ModelEncoder(DateEncoder, QuerySetEncoder, JSONEncoder):
                     value = str(value)
                 elif property in self.encoders:
                     encoder = self.encoders[property]
-                    value = encoder.default(value)
+                    if callable(encoder):  # Check if it's a function or callable object
+                        value = encoder(value)
+                    else:
+                        value = encoder.default(value)
                 d[property] = value
             d.update(self.get_extra_data(o))
             return d

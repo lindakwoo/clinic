@@ -1,4 +1,4 @@
-from .models import Patient, Therapist, Session, Appointment
+from .models import Patient, Therapist, Appointment
 from django.http import HttpResponse
 from common.json import ModelEncoder
 from django.http import JsonResponse
@@ -42,16 +42,14 @@ class TherapistEncoder(ModelEncoder):
     encoders = {"phone_number": str}
 
 
+def encode_time(time_obj):
+    return time_obj.strftime('%H:%M:%S')
+
+
 class AppointmentEncoder(ModelEncoder):
     model = Appointment
     properties = ["id", "patient", "therapist", "date", "time"]
-    encoders = {"patient": PatientEncoder(), "therapist": TherapistEncoder()}
-
-
-class SessionEncoder(ModelEncoder):
-    model = Session
-    properties = ["id", "patient_phone", "doctor_phone", "message_sid", "created_at"]
-    encoders = {"patient_phone": str, "doctor_phone": str}
+    encoders = {"patient": PatientEncoder(), "therapist": TherapistEncoder(), "time": encode_time}
 
 
 @require_http_methods(["POST"])
@@ -81,25 +79,22 @@ def patient_create(request):
                 twilio_client.messages.create(
                     body=message_body,
                     from_=TWILIO_PHONE_NUMBER,
-                    to="+18557231532",
+                    to="+15103301074", # (for testing purposes only) replace with therapist_phone_number
+                    # to=therapist_phone_number
                     # to="+15108826397", (my peronsal phone number...does not work!)
-                    # to="+18777804236",  # (for testing purposes only) replace with therapist_phone_number
                     # messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID,
                     status_callback=status_callback_url
                 )
 
-                # session = Session.objects.create(
-                #     patient_phone=patient.phone_number,
-                #     doctor_phone=therapist.phone_number,
-                #     message_sid=message.sid,
-
-                # )
-                # print(session)
-                # return JsonResponse(session, encoder=SessionEncoder, safe=False)
+                appointment = Appointment.objects.create(
+                    patient=patient,
+                    therapist=therapist
+                )
+                print(appointment)
+                return JsonResponse(appointment, encoder=AppointmentEncoder, safe=False)
         except Exception as e:
             logger.error(f"Error sending message: {str(e)}")
             raise
-        return JsonResponse(patient, encoder=PatientEncoder, safe=False)
     except Exception as e:
         return JsonResponse({"message": f"Patient not created: {str(e)}"}, status=400)
 
@@ -110,12 +105,12 @@ def send_message_to_patient(request):
         data = json.loads(request.body)
         patient_phone_number = data.get("phone_number")
         message_from_therapist = data.get("message")
-        status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
+        # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
         message = twilio_client.messages.create(
             body=message_from_therapist,
             to=patient_phone_number,
-            from_=TWILIO_PHONE_NUMBER,
-            status_callback=status_callback_url)
+            from_=TWILIO_PHONE_NUMBER,)
+            # status_callback=status_callback_url)
 
         return JsonResponse({'status': 'Message sent', 'messageSid': message.sid})
 
@@ -168,34 +163,6 @@ def receive_message(request):
     except Exception as e:
         logger.error(f"Error processing received message: {str(e)}")
         return HttpResponse(status=500)
-
-
-@require_http_methods(["POST"])
-def send_message(request):
-    try:
-        data = json.loads(request.body)
-        patient_id = data.get("patientId")
-        message_body = data.get("message")
-
-        patient = Patient.objects.get(id=patient_id)
-        patient_phone_number = patient.phone_number
-
-        # Assuming you have a way to get the therapist's phone number or ID
-        # For this example, let's use a static phone number
-        therapist_phone_number = "+18777804236"
-
-        response = twilio_client.messages.create(
-            body=message_body,
-            from_=TWILIO_PHONE_NUMBER,
-            to=patient_phone_number,
-            messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID
-        )
-
-        return JsonResponse({'status': 'Message sent', 'messageSid': response.sid})
-    except Exception as e:
-        logger.error(f"Error sending message: {str(e)}")
-        return JsonResponse({"message": f"Message not sent: {str(e)}"}, status=400)
-
 
 
 @require_http_methods(["GET"])

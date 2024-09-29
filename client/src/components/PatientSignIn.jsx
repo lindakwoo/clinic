@@ -70,7 +70,9 @@ function PatientSignIn() {
               fullWidth
               margin='normal'
               value={firstInitial}
-              onChange={(e) => setFirstInitial(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 1) setFirstInitial(e.target.value);
+              }}
             />
             <TextField
               label='Last Initial'
@@ -78,7 +80,9 @@ function PatientSignIn() {
               fullWidth
               margin='normal'
               value={lastInitial}
-              onChange={(e) => setLastInitial(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 1) setLastInitial(e.target.value);
+              }}
             />
             <StyledPhoneInput
               international
