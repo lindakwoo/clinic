@@ -40,6 +40,6 @@ class Appointment(models.Model):
 
     def display_datetime(self):
         # Return a formatted string of the datetime for admin display
-        return self.datetime.strftime("%Y-%m-%d %H:%M:%S") if self.date and self.time else "Not set"
+        return self.datetime.strftime("%Y-%m-%d %I:%M:%S %p") if self.date and self.time else "Not set"
 
     display_datetime.short_description = "Appointment Date & Time"  # This will set the column header in admin
