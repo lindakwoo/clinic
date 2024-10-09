@@ -60,7 +60,8 @@ ALLOWED_HOSTS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://2ede-2601-645-e88-7990-4df5-651b-55d6-a0a7.ngrok-free.app",
-    "https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app"
+    "https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app",
+    "https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app",
     "https://fruity-chicken-spend.loca.lt",
 ]
 
@@ -70,6 +71,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://2ede-2601-645-e88-7990-4df5-651b-55d6-a0a7.ngrok-free.app",
     "https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app",
+    "https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app",
     "https://fruity-chicken-spend.loca.lt",
 ]
 

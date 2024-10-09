@@ -9,6 +9,8 @@ const SendMessage = () => {
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const fetchPatient = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
@@ -26,13 +28,14 @@ const SendMessage = () => {
     }
     setIsSending(true);
     setError("");
+    setSuccessMessage("");
     try {
       await axios.post("http://localhost:8000/api/twilio/send_message_to_patient/", {
         phone_number: patient.phone_number,
         message: message,
       });
       setMessage("");
-      alert("Message sent successfully!");
+      setSuccessMessage("Message sent successfully!");
     } catch (error) {
       console.error("There was an error sending the message!", error);
       setError("Failed to send message");
@@ -46,7 +49,10 @@ const SendMessage = () => {
   }, []);
 
   return (
-    <Container maxWidth='sm'>
+    <Container sx={{ p: { xs: "0", lg: "16px" } }} maxWidth='sm'>
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
+      </Box>
       <Box mt={4} p={2} border={1} borderColor='grey.300' borderRadius={2}>
         {patient ? (
           <>
@@ -68,7 +74,19 @@ const SendMessage = () => {
                 {error}
               </Typography>
             )}
-            <Button variant='contained' color='primary' onClick={handleSendMessage} disabled={isSending} sx={{ mt: 2 }}>
+            {successMessage && (
+              <Typography color='success.main' variant='body2'>
+                {successMessage}
+              </Typography>
+            )}
+            <Button
+              variant='contained'
+              color='primary'
+              disabled={isSending}
+              onClick={handleSendMessage}
+              sx={{ mt: 2 }}
+              fullWidth
+            >
               {isSending ? "Sending..." : "Send Message"}
             </Button>
           </>

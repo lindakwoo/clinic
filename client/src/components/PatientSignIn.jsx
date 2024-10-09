@@ -9,6 +9,7 @@ import {
   FormControl,
   InputLabel,
   styled,
+  Box,
 } from "@mui/material";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css"; // Import styles for the phone input
@@ -36,6 +37,7 @@ function PatientSignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log("Phone number type:", typeof phoneNumber);
       const response = await axios.post("http://localhost:8000/api/patients/", {
         first_initial: firstInitial,
         last_initial: lastInitial,
@@ -57,10 +59,13 @@ function PatientSignIn() {
   }, []);
 
   return (
-    <Container maxWidth='sm'>
+    <Container sx={{ p: { xs: "0", lg: "16px" } }} maxWidth='xs'>
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
+      </Box>
       {!isSignedIn && therapists.length > 0 ? (
         <>
-          <Typography variant='h4' gutterBottom>
+          <Typography variant='h4' gutterBottom align='center'>
             Patient Sign In
           </Typography>
           <form onSubmit={handleSubmit}>
@@ -128,18 +133,28 @@ function PatientSignIn() {
                 ))}
               </Select>
             </FormControl>
-            <Button type='submit' variant='contained' color='primary'>
+            <Button type='submit' variant='contained' color='primary' fullWidth>
               Submit
             </Button>
           </form>
         </>
       ) : !isSignedIn && therapists.length === 0 ? (
-        <Typography>Loading therapis information...</Typography>
+        <Typography>Loading therapist information...</Typography>
       ) : isSignedIn ? (
-        <Typography variant='h4' gutterBottom>
-          {" "}
-          You have signed in and your therapist will contact you shortly.
-        </Typography>
+        <Box
+          sx={{
+            backgroundColor: "#d4edda",
+            color: "#155724",
+            border: "1px solid #c3e6cb",
+            borderRadius: "4px",
+            padding: "16px",
+            marginTop: "20px",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant='h5'>You have signed in successfully!</Typography>
+          <Typography variant='body1'>Your therapist will contact you shortly.</Typography>
+        </Box>
       ) : null}
     </Container>
   );

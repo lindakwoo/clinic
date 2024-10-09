@@ -62,36 +62,36 @@ def patient_create(request):
         patient = Patient.objects.create(
                 first_initial=data["first_initial"],
                 last_initial=data["last_initial"],
-                phone_number=patient_phone_number,
+                phone_number=patient_phone_number if isinstance(patient_phone_number, str) else str(patient_phone_number),
             )
 
         therapist = Therapist.objects.get(id=therapist_id)
         try:
-                therapist_phone_number = therapist.phone_number
-                status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
+            therapist_phone_number = therapist.phone_number if isinstance(therapist.phone_number, str) else str(therapist.phone_number)
+            # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
 
-                message_url = f"https://42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app/send-message/{patient.id}/"
-                short_url = shorten_url(message_url)
-                message_body = (
-                    f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
-                    f"Click this link to send a message to the patient: {short_url}"
-                )
-                twilio_client.messages.create(
-                    body=message_body,
-                    from_=TWILIO_PHONE_NUMBER,
-                    to="+15103301074", # (for testing purposes only) replace with therapist_phone_number
-                    # to=therapist_phone_number
-                    # to="+15108826397", (my peronsal phone number...does not work!)
-                    # messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID,
-                    status_callback=status_callback_url
-                )
+            message_url = f"https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app/send-message/{patient.id}/"
+            short_url = shorten_url(message_url)
+            message_body = (
+                f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
+                f"Click this link to send a message to the patient: {short_url}"
+            )
+            twilio_client.messages.create(
+                body=message_body,
+                from_=TWILIO_PHONE_NUMBER,
+                # to="+15103301074",  # (for testing purposes only)
+                to=therapist_phone_number
+                # to="+15108826397", (my peronsal phone number...does not work!)
+                # messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID,
+                # status_callback=status_callback_url
+            )
 
-                appointment = Appointment.objects.create(
-                    patient=patient,
-                    therapist=therapist
-                )
-                print(appointment)
-                return JsonResponse(appointment, encoder=AppointmentEncoder, safe=False)
+            appointment = Appointment.objects.create(
+                patient=patient,
+                therapist=therapist
+            )
+            print(appointment)
+            return JsonResponse(appointment, encoder=AppointmentEncoder, safe=False)
         except Exception as e:
             logger.error(f"Error sending message: {str(e)}")
             raise
@@ -197,4 +197,17 @@ def patient_detail(request, pk):
     except Exception as e:
         return JsonResponse(
             {"message": f"Patient not retreived: {str(e)}"}, status=400
+        )
+
+
+@require_http_methods(["GET"])
+def appointment_list(request):
+    try:
+        appointments = Appointment.objects.all()
+        return JsonResponse(
+            {"appointments": appointments}, encoder=AppointmentEncoder, safe=False
+        )
+    except Exception as e:
+        return JsonResponse(
+            {"message": f"Appointments not retreived: {str(e)}"}, status=400
         )
