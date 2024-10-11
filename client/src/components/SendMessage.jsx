@@ -92,7 +92,7 @@ const SendMessage = () => {
               sx={{ mt: 2 }}
               fullWidth
             >
-              {isSending ? "Sending..." : "Send Message To Patient"}
+              {isSending ? "Sending..." : "Send Message"}
             </Button>
           </>
         ) : (
