@@ -78,7 +78,7 @@ def patient_create(request):
             therapist_phone_number = therapist.phone_number if isinstance(therapist.phone_number, str) else str(therapist.phone_number)
             # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
 
-            message_url = f"https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app/send_message/{patient.id}/"
+            message_url = f"https://uplift-clinic2.web.app/send_message/{patient.id}/"
             short_url = shorten_url(message_url)
             message_body = (
                 f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"

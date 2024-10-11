@@ -13,7 +13,7 @@ const SendMessage = () => {
 
   const fetchPatient = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
+      const response = await axios.get(`https://uplift-clinic-677edaaf8da8.herokuapp.com/api/patients/${id}/`);
       console.log(response.data);
       setPatient(response.data);
     } catch (error) {
