@@ -18,3 +18,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SECRET }}
           channelId: live
           projectId: uplift-clinic2
+          entryPoint: client
