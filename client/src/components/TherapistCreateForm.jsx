@@ -15,10 +15,12 @@ function TherapistCreateForm() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isCreated, setIsCreated] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const url = "http://localhost:8000/api/therapists/create/";
+      const url = `${apiUrl}api/therapists/create/`;
       const data = { first_name: firstName, last_name: lastName, phone_number: phoneNumber };
       const options = { method: "POST", body: JSON.stringify(data) };
       const response = await customFetch(url, options);

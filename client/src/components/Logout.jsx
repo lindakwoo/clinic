@@ -6,11 +6,14 @@ import customFetch from "./fetchWrapper";
 const Logout = () => {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
+
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
+
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refresh_token");
     console.log("refresh", refreshToken);
     try {
-      const url = "http://localhost:8000/logout/";
+      const url = `${apiUrl}/logout/`;
       const data = { refresh_token: refreshToken };
       const options = { body: JSON.stringify(data), method: "POST" };
       const response = await customFetch(url, options);

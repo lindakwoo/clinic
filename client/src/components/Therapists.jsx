@@ -22,10 +22,11 @@ const Therapists = () => {
   const navigate = useNavigate();
   const { org } = useParams();
   const [therapists, setTherapists] = useState([]);
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
 
   const fetchTherapists = async () => {
     try {
-      const url = `http://localhost:8000/api/therapists/${org}`;
+      const url = `${apiUrl}/api/therapists/${org}`;
       const options = { method: "GET" };
       const response = await customFetch(url, options);
       setTherapists(response.therapists);
@@ -36,7 +37,7 @@ const Therapists = () => {
 
   const deleteTherapist = async (id) => {
     try {
-      const url = `http://localhost:8000/api/therapists/${id}/delete/`; // Update the URL based on your backend route
+      const url = `${apiUrl}/api/therapists/${id}/delete/`; // Update the URL based on your backend route
       const options = {
         method: "DELETE",
       };

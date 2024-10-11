@@ -11,11 +11,13 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/login/",
+        `${apiUrl}/login/`,
         { username, password },
         {
           headers: {

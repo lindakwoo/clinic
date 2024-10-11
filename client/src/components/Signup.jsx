@@ -14,6 +14,8 @@ function Signup() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -24,7 +26,7 @@ function Signup() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/signup/",
+        `${apiUrl}/signup/`,
         { username, password, confirm_password: confirmPassword, organization_name: org },
         {
           headers: {

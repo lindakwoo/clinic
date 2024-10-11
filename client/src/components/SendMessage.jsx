@@ -11,12 +11,11 @@ const SendMessage = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000/";
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
   console.log(apiUrl);
 
   const fetchPatient = async () => {
     try {
-      // const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
       const response = await axios.get(`${apiUrl}/api/patients/${id}/`);
 
       console.log(response.data);
@@ -35,7 +34,7 @@ const SendMessage = () => {
     setError("");
     setSuccessMessage("");
     try {
-      await axios.post("http://localhost:8000/api/twilio/send_message_to_patient/", {
+      await axios.post(`${apiUrl}/api/twilio/send_message_to_patient/`, {
         phone_number: patient.phone_number,
         message: message,
       });

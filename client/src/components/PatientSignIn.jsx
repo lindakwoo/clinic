@@ -27,9 +27,10 @@ function PatientSignIn() {
   const [therapists, setTherapists] = useState([]);
   const [therapist, setTherapist] = useState("");
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
   const fetcchTherapists = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/therapists/${org}`);
+      const response = await axios.get(`${apiUrl}/api/therapists/${org}`);
       setTherapists(response.data.therapists);
     } catch (error) {
       console.error("There was an error fetching the therapists!", error);
@@ -40,7 +41,7 @@ function PatientSignIn() {
     event.preventDefault();
     try {
       console.log("Phone number type:", typeof phoneNumber);
-      const response = await axios.post("http://localhost:8000/api/patients/", {
+      const response = await axios.post(`${apiUrl}/api/patients/`, {
         first_initial: firstInitial,
         last_initial: lastInitial,
         phone_number: phoneNumber,
