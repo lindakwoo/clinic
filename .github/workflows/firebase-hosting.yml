@@ -27,8 +27,11 @@ jobs:
         run: npm run build --prefix client # Adjust to build the project in the client directory
 
       - name: Deploy to Firebase Hosting
-        uses: wzieba/Firebase-Deployment-Github-Action@v4.0.0
-        with:
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: uplift-clinic2
-          distDir: client/dist
+        # uses: wzieba/Firebase-Deployment-Github-Action@v4.0.0
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: npx firebase deploy --project uplift-clinic2
+        # with:
+        #   firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        #   projectId: uplift-clinic2
+        #   distDir: client/dist
