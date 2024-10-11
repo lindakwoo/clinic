@@ -21,7 +21,7 @@ jobs:
           node-version: "20.11.1" # Specify your Node.js version
 
       - name: Install dependencies
-        run: npm ci --prefix client # Adjust to install dependencies in the client directory
+        run: npm install --prefix client # Adjust to install dependencies in the client directory
 
       - name: Build project
         run: npm run build --prefix client # Adjust to build the project in the client directory
