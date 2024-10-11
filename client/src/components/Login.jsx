@@ -35,6 +35,9 @@ function Login() {
       <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px", width: "200px", margin: "auto" }}>
         <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
       </Box>
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px", width: "200px", margin: "auto" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
+      </Box>
       <Card sx={{ maxWidth: 400, width: "100%", padding: 3, backgroundColor: "white" }}>
         <CardContent>
           <Typography variant='h5' component='div' align='center'>
