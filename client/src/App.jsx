@@ -12,7 +12,7 @@ import Login from "./components/Login";
 import Therapists from "./components/Therapists";
 import TherapistCreateForm from "./components/TherapistCreateForm";
 import ProtectedRoute from "./protected-route";
-import Navbar from "./components/Navbar";
+import NavbarWrapper from "./components/navbar/NavbarWrapper";
 
 function App() {
   const { login } = useContext(AuthContext);
@@ -42,7 +42,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <NavbarWrapper />
       <main>
         <Box sx={{ mx: { xs: "0", lg: "64px" }, mt: { xs: "0", lg: "32px" } }}>
           <Routes>

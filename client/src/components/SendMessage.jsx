@@ -11,9 +11,11 @@ const SendMessage = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
+
   const fetchPatient = async () => {
     try {
-      const response = await axios.get(`https://uplift-clinic-677edaaf8da8.herokuapp.com/api/patients/${id}/`);
+      const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
       console.log(response.data);
       setPatient(response.data);
     } catch (error) {

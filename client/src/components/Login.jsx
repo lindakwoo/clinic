@@ -31,24 +31,11 @@ function Login() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Box sx={{ position: "absolute", top: 20, left: 20 }}>
-        <img
-          src='/images/uplift4FINAL.jpg' // Path to your Uplift logo
-          alt='Uplift Logo'
-          style={{ width: "150px", height: "auto" }}
-        />
+    <>
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px", width: "200px", margin: "auto" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
       </Box>
-      <Card sx={{ maxWidth: 400, width: "100%", padding: 3 }}>
+      <Card sx={{ maxWidth: 400, width: "100%", padding: 3, backgroundColor: "white" }}>
         <CardContent>
           <Typography variant='h5' component='div' align='center'>
             Login
@@ -82,7 +69,7 @@ function Login() {
           </form>
         </CardContent>
       </Card>
-    </Box>
+    </>
   );
 }
 

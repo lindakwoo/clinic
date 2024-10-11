@@ -34,7 +34,7 @@ function Signup() {
       );
       login(response.data.access, response.data.refresh, response.data.user);
       setSuccessMessage("User created successfully!");
-      navigate("/appointments");
+      navigate("/appointments/uplift");
     } catch (error) {
       const errorMessage = error.response && error.response.data ? error.response.data : error.message;
       setErrorMessage("Error creating user: " + JSON.stringify(errorMessage));
@@ -42,22 +42,9 @@ function Signup() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Box sx={{ position: "absolute", top: 20, left: 20 }}>
-        <img
-          src='/images/uplift4FINAL.jpg' // Path to your Uplift logo
-          alt='Uplift Logo'
-          style={{ width: "150px", height: "auto" }}
-        />
+    <>
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px", width: "200px", margin: "auto" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
       </Box>
       <Card sx={{ maxWidth: 400, width: "100%", padding: 3 }}>
         <CardContent>
@@ -107,7 +94,7 @@ function Signup() {
           </form>
         </CardContent>
       </Card>
-    </Box>
+    </>
   );
 }
 

@@ -54,8 +54,8 @@ const Therapists = () => {
 
   return (
     <>
-      <Box sx={{ position: "absolute", top: 0, left: 0, p: 2, width: "150px", height: "auto" }}>
-        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ width: "100%", height: "auto" }} />
+      <Box style={{ display: "flex", justifyContent: "center", marginBottom: "20px", width: "200px", margin: "auto" }}>
+        <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
       </Box>
       <Box sx={{ mb: 2 }}>
         <Button

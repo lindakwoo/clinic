@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledLink } from "./Styled";
+import { StyledLink } from "../Styled";
 import { useLocation } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 
