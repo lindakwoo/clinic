@@ -29,7 +29,7 @@ jobs:
       - name: Deploy to Firebase Hosting
         # uses: wzieba/Firebase-Deployment-Github-Action@v4.0.0
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: npx firebase deploy --project uplift-clinic2
         # with:
         #   firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
