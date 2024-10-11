@@ -35,4 +35,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SECRET }}
           projectId: uplift-clinic2
           distDir: client/dist
+          channelId: live
           entryPoint: client # Adjust to the directory where the Firebase configuration file is located
