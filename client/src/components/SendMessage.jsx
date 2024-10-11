@@ -11,11 +11,14 @@ const SendMessage = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const apiUrl = import.meta.env.VITE_APP_API_URL;
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000/";
+  console.log(apiUrl);
 
   const fetchPatient = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
+      // const response = await axios.get(`http://localhost:8000/api/patients/${id}/`);
+      const response = await axios.get(`${apiUrl}/api/patients/${id}/`);
+
       console.log(response.data);
       setPatient(response.data);
     } catch (error) {
