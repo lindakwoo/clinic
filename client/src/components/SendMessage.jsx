@@ -62,7 +62,7 @@ const SendMessage = () => {
         {patient ? (
           <>
             <Typography variant='h6' gutterBottom>
-              Send a Text Message to: {patient.first_initial}.{patient.last_initial}.
+              Send a Text Message to {patient.first_initial}.{patient.last_initial}.
             </Typography>
             <TextField
               fullWidth
@@ -92,7 +92,7 @@ const SendMessage = () => {
               sx={{ mt: 2 }}
               fullWidth
             >
-              {isSending ? "Sending..." : "Send Message"}
+              {isSending ? "Sending..." : "Send Message!"}
             </Button>
           </>
         ) : (
