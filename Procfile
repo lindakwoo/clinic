@@ -1,2 +1,2 @@
-web: gunicorn clinic.wsgi --log-file -
+web: gunicorn clinic.wsgi:application
 release: python manage.py migrate
