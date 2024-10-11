@@ -213,7 +213,7 @@ def therapist_create(request):
         token = auth_header.split(' ')[1] if ' ' in auth_header else None
         if not token:
             return JsonResponse({'error': 'Token not provided.'}, status=403)
-        auth_service_url = 'http://localhost:8000/org_name/'
+        auth_service_url = 'https://uplift-clinic-677edaaf8da8.herokuapp.com/org_name/'
         response = requests.get(auth_service_url, headers={'Authorization': f'Bearer {token}'})
         if response.status_code != 200:
             return Response({'error': 'Failed to retrieve profile.'}, status=status.HTTP_400_BAD_REQUEST)
