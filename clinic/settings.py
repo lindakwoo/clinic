@@ -168,10 +168,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-STATICFILES_DIRS = [
-    # BASE_DIR / "static",
-    BASE_DIR / "client" / "dist",
-]
+# STATICFILES_DIRS = [
+#     # BASE_DIR / "static",
+#     BASE_DIR / "client" / "dist",
+# ]
+
+if DEBUG:  # In development
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+        os.path.join(BASE_DIR, "client", "dist"),
+    ]
+else:  # In production (Heroku)
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "client", "dist"),
+    ]
 
 TIME_ZONE = 'America/Chicago'
 USE_TZ = True
