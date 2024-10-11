@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -18,6 +19,7 @@ import axios from "axios";
 const StyledPhoneInput = styled(PhoneInput)({});
 
 function PatientSignIn() {
+  const { org } = useParams();
   const [firstInitial, setFirstInitial] = useState("");
   const [lastInitial, setLastInitial] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -27,7 +29,7 @@ function PatientSignIn() {
 
   const fetcchTherapists = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/therapists/");
+      const response = await axios.get(`http://localhost:8000/api/therapists/${org}`);
       setTherapists(response.data.therapists);
     } catch (error) {
       console.error("There was an error fetching the therapists!", error);
@@ -42,6 +44,7 @@ function PatientSignIn() {
         first_initial: firstInitial,
         last_initial: lastInitial,
         phone_number: phoneNumber,
+        organization_name: org,
         therapist: therapist,
       });
       console.log("Patient created:", response.data);

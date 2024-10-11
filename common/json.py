@@ -34,15 +34,18 @@ class ModelEncoder(DateEncoder, QuerySetEncoder, JSONEncoder):
                     pass
             for property in self.properties:
                 value = getattr(o, property)
-                if isinstance(value, PhoneNumber):
-                    value = str(value)
-                elif property in self.encoders:
-                    encoder = self.encoders[property]
-                    if callable(encoder):  # Check if it's a function or callable object
-                        value = encoder(value)
-                    else:
-                        value = encoder.default(value)
-                d[property] = value
+                if value is None:  # Handle None values
+                    d[property] = None
+                else:
+                    if isinstance(value, PhoneNumber):
+                        value = str(value)
+                    elif property in self.encoders:
+                        encoder = self.encoders[property]
+                        if callable(encoder):  # Check if it's a function or callable object
+                            value = encoder(value)
+                        else:
+                            value = encoder.default(value)
+                    d[property] = value
             d.update(self.get_extra_data(o))
             return d
         else:

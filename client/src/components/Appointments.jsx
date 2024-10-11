@@ -18,9 +18,11 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import axios from "axios";
+import { useParams } from "react-router-dom";
+import customFetch from "./fetchWrapper";
 
 const Appointments = () => {
+  const { org } = useParams();
   const [appointments, setAppointments] = useState([]);
   const [filterDate, setFilterDate] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
@@ -28,8 +30,10 @@ const Appointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/appointments/");
-      setAppointments(response.data.appointments);
+      const url = `http://localhost:8000/api/appointments/${org}/`;
+      const options = { method: "GET" };
+      const response = await customFetch(url, options);
+      setAppointments(response.appointments);
     } catch (error) {
       console.error("There was an error fetching the appointments!", error);
     }
@@ -185,9 +189,7 @@ const Appointments = () => {
                     {appointment.patient.last_initial}
                   </TableCell>
                   <TableCell>{appointment.patient.phone_number}</TableCell>
-                  <TableCell>
-                    {appointment.therapist.first_name} {appointment.therapist.last_name}
-                  </TableCell>
+                  <TableCell>{appointment.therapist_name}</TableCell>
                   <TableCell>{formatDateTime(appointment.date, appointment.time)}</TableCell>
                 </TableRow>
               ))}

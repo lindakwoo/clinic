@@ -2,13 +2,18 @@ from .models import Patient, Therapist, Appointment
 from django.http import HttpResponse
 from common.json import ModelEncoder
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework import status
 from twilio.rest import Client
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.http import require_http_methods
 import json
 import logging
 import requests
 import os
 from dotenv import load_dotenv
+from django.views.decorators.csrf import csrf_exempt
 
 load_dotenv()
 
@@ -38,7 +43,7 @@ class PatientEncoder(ModelEncoder):
 
 class TherapistEncoder(ModelEncoder):
     model = Therapist
-    properties = ["id", "first_name", "last_name", "phone_number"]
+    properties = ["id", "first_name", "last_name", "phone_number", "organization_name"]
     encoders = {"phone_number": str}
 
 
@@ -48,20 +53,23 @@ def encode_time(time_obj):
 
 class AppointmentEncoder(ModelEncoder):
     model = Appointment
-    properties = ["id", "patient", "therapist", "date", "time"]
+    properties = ["id", "patient", "therapist", "date", "time", "therapist_name"]
     encoders = {"patient": PatientEncoder(), "therapist": TherapistEncoder(), "time": encode_time}
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def patient_create(request):
     try:
         data = json.loads(request.body)
         patient_phone_number = str(data.get("phone_number", ""))
         therapist_id = data.get("therapist")
+        organization_name = data.get("organization_name")
 
         patient = Patient.objects.create(
                 first_initial=data["first_initial"],
                 last_initial=data["last_initial"],
+                organization_name=organization_name,
                 phone_number=patient_phone_number if isinstance(patient_phone_number, str) else str(patient_phone_number),
             )
 
@@ -70,7 +78,7 @@ def patient_create(request):
             therapist_phone_number = therapist.phone_number if isinstance(therapist.phone_number, str) else str(therapist.phone_number)
             # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
 
-            message_url = f"https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app/send-message/{patient.id}/"
+            message_url = f"https://17b8-2601-645-e88-7990-5cfe-9f05-844e-28be.ngrok-free.app/send_message/{patient.id}/"
             short_url = shorten_url(message_url)
             message_body = (
                 f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
@@ -88,7 +96,8 @@ def patient_create(request):
 
             appointment = Appointment.objects.create(
                 patient=patient,
-                therapist=therapist
+                therapist=therapist,
+                organization_name=organization_name,
             )
             print(appointment)
             return JsonResponse(appointment, encoder=AppointmentEncoder, safe=False)
@@ -98,7 +107,7 @@ def patient_create(request):
     except Exception as e:
         return JsonResponse({"message": f"Patient not created: {str(e)}"}, status=400)
 
-
+@csrf_exempt
 @require_http_methods(["POST"])
 def send_message_to_patient(request):
     try:
@@ -165,10 +174,11 @@ def receive_message(request):
         return HttpResponse(status=500)
 
 
+@csrf_exempt
 @require_http_methods(["GET"])
-def therapist_list(request):
+def therapist_list(request, organization_name):
     try:
-        therapists = Therapist.objects.all()
+        therapists = Therapist.objects.filter(organization_name=organization_name)
         return JsonResponse(
             {"therapists": therapists}, encoder=TherapistEncoder, safe=False
         )
@@ -188,6 +198,65 @@ def therapist_detail(request, pk):
             {"message": f"Therapist not retreived: {str(e)}"}, status=400
         )
 
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def therapist_create(request):
+    try:
+        # Extract the token from the Authorization header
+        logger.debug(f"Request META: {request.META}")
+        auth_header = request.META.get('HTTP_AUTHORIZATION', None)
+        if not auth_header:
+            return JsonResponse({'error': 'Authorization header not provided.'}, status=403)
+
+        # The token should be in the format "Bearer <token>"
+        token = auth_header.split(' ')[1] if ' ' in auth_header else None
+        if not token:
+            return JsonResponse({'error': 'Token not provided.'}, status=403)
+        auth_service_url = 'http://localhost:8000/org_name/'
+        response = requests.get(auth_service_url, headers={'Authorization': f'Bearer {token}'})
+        if response.status_code != 200:
+            return Response({'error': 'Failed to retrieve profile.'}, status=status.HTTP_400_BAD_REQUEST)
+        organization_name = response.json().get('organization_name')
+        data = json.loads(request.body)
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        phone_number = data.get("phone_number")
+
+        if not first_name or not last_name or not phone_number:
+            return JsonResponse({"message": "Missing required fields"}, status=400)
+
+        created_by = request.user
+
+        therapist = Therapist.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            organization_name=organization_name,
+            created_by=created_by
+        )
+
+        return JsonResponse(therapist, encoder=TherapistEncoder, safe=False)
+    except json.JSONDecodeError:
+        return JsonResponse({"message": "Invalid JSON"}, status=400)
+    except Exception as e:
+        logger.error(f"Error creating therapist: {str(e)}")
+        return JsonResponse({"message": f"Error creating therapist: {str(e)}"}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def therapist_delete(request, pk):
+    try:
+        therapist = Therapist.objects.get(id=pk)
+        therapist.delete()
+        return JsonResponse({"message": "Therapist deleted successfully."}, status=204)
+    except Therapist.DoesNotExist:
+        return JsonResponse({"message": "Therapist not found."}, status=404)
+    except Exception as e:
+        logger.error(f"Error deleting therapist: {str(e)}")
+        return JsonResponse({"message": f"Error deleting therapist: {str(e)}"}, status=400)
+
 
 @require_http_methods(["GET"])
 def patient_detail(request, pk):
@@ -200,10 +269,12 @@ def patient_detail(request, pk):
         )
 
 
-@require_http_methods(["GET"])
-def appointment_list(request):
+@csrf_exempt
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def appointment_list(request, organization_name):
     try:
-        appointments = Appointment.objects.all()
+        appointments = Appointment.objects.filter(organization_name=organization_name).order_by("date", "-time")
         return JsonResponse(
             {"appointments": appointments}, encoder=AppointmentEncoder, safe=False
         )
