@@ -59,10 +59,12 @@ MIDDLEWARE = [
 ]
 
 ALLOWED_HOSTS = [
+    'uplift-clinic-677edaaf8da8.herokuapp.com',
     "localhost",
     "service-api",
     "42ed-2601-645-e88-7990-ccae-5fac-5ad7-f651.ngrok-free.app"
     "fruity-chicken-spend.loca.lt",
+    '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
