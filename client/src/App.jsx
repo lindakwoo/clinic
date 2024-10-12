@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import "./App.css";
 import PatientSignIn from "./components/PatientSignIn";
@@ -13,6 +13,7 @@ import Therapists from "./components/Therapists";
 import TherapistCreateForm from "./components/TherapistCreateForm";
 import ProtectedRoute from "./protected-route";
 import NavbarWrapper from "./components/navbar/NavbarWrapper";
+import Home from "./components/Home";
 
 function App() {
   const { login } = useContext(AuthContext);
@@ -46,6 +47,7 @@ function App() {
       <main>
         <Box sx={{ mx: { xs: "0", lg: "64px" }, mt: { xs: "0", lg: "32px" } }}>
           <Routes>
+            <Route path='/' element={<Home />} />
             <Route path='/patient_sign_in/:org' element={<PatientSignIn />} />
             <Route path='/login' element={<Login />} />
             <Route path='/logout' element={<Logout />} />
