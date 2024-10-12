@@ -28,9 +28,11 @@ const Appointments = () => {
   const [filterMonth, setFilterMonth] = useState("");
   const [filterWeek, setFilterWeek] = useState("");
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
+
   const fetchAppointments = async () => {
     try {
-      const url = `http://localhost:8000/api/appointments/${org}/`;
+      const url = `${apiUrl}/api/appointments/${org}/`;
       const options = { method: "GET" };
       const response = await customFetch(url, options);
       setAppointments(response.appointments);
