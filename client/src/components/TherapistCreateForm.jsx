@@ -20,7 +20,7 @@ function TherapistCreateForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const url = `${apiUrl}api/therapists/create/`;
+      const url = `${apiUrl}/api/therapists/create/`;
       const data = { first_name: firstName, last_name: lastName, phone_number: phoneNumber };
       const options = { method: "POST", body: JSON.stringify(data) };
       const response = await customFetch(url, options);
