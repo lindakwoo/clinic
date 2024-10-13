@@ -76,7 +76,6 @@ def patient_create(request):
         therapist = Therapist.objects.get(id=therapist_id)
         try:
             therapist_phone_number = therapist.phone_number if isinstance(therapist.phone_number, str) else str(therapist.phone_number)
-            # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
 
             message_url = f"https://uplift-clinic2.web.app/send_message/{patient.id}/"
             short_url = shorten_url(message_url)
@@ -87,11 +86,7 @@ def patient_create(request):
             twilio_client.messages.create(
                 body=message_body,
                 from_=TWILIO_PHONE_NUMBER,
-                # to="+15103301074",  # (for testing purposes only)
                 to=therapist_phone_number
-                # to="+15108826397", (my peronsal phone number...does not work!)
-                # messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID,
-                # status_callback=status_callback_url
             )
 
             appointment = Appointment.objects.create(
@@ -107,6 +102,7 @@ def patient_create(request):
     except Exception as e:
         return JsonResponse({"message": f"Patient not created: {str(e)}"}, status=400)
 
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def send_message_to_patient(request):
@@ -114,12 +110,10 @@ def send_message_to_patient(request):
         data = json.loads(request.body)
         patient_phone_number = data.get("phone_number")
         message_from_therapist = data.get("message")
-        # status_callback_url = "https://fruity-chicken-spend.loca.lt/api/twilio/status/"
         message = twilio_client.messages.create(
             body=message_from_therapist,
             to=patient_phone_number,
             from_=TWILIO_PHONE_NUMBER,)
-            # status_callback=status_callback_url)
 
         return JsonResponse({'status': 'Message sent', 'messageSid': message.sid})
 
@@ -137,40 +131,6 @@ def twilio_status_callback(request):
         return HttpResponse(status=200)
     except Exception as e:
         logger.error(f"Error processing status callback: {str(e)}")
-        return HttpResponse(status=500)
-
-
-@require_http_methods(["POST"])
-def receive_message(request):
-    try:
-        # from_number = request.POST.get('From')
-        # message_sid = request.POST.get('MessageSid')
-        # message_body = request.POST.get('Body').strip()
-        # # in_reply_to = request.POST.get('InReplyTo')
-
-        # print('request', request.POST)
-
-        # logger.info(f"Received message from {from_number} with SID {message_sid} and body: {message_body}")
-        # patient_phone, choice = extract_patient_phone_and_choice(message_body)
-
-        # # if in_reply_to:
-        # #     session = Session.objects.filter(message_sid=in_reply_to).first()
-        # #     if session:
-        # patient_phone_number = session.patient_phone
-        # print("patient", patient_phone_number)
-
-        # response = twilio_client.messages.create(
-        #             # body=message_body,
-        #         body="I'm running 10 minutes late.",
-        #             # from_=TWILIO_PHONE_NUMBER,
-        #             # to=patient_phone_number,
-        #         to="+18777804236",  # (for testing purposes only) replace with patient_phone_number
-        #             messaging_service_sid=TWILIO_MESSAGING_SERVICE_SID
-        # )
-
-        return HttpResponse(status=200)
-    except Exception as e:
-        logger.error(f"Error processing received message: {str(e)}")
         return HttpResponse(status=500)
 
 
@@ -197,6 +157,7 @@ def therapist_detail(request, pk):
         return JsonResponse(
             {"message": f"Therapist not retreived: {str(e)}"}, status=400
         )
+
 
 @csrf_exempt
 @api_view(["POST"])

@@ -21,6 +21,5 @@ urlpatterns = [
     path('therapists/<int:pk>/delete/', therapist_delete, name='therapist_delete'),
     path("appointments/<str:organization_name>/", appointment_list,  name="appointment_list"),
     path('twilio/status/', twilio_status_callback, name='twilio_status_callback'),
-    path('twilio/receive/', receive_message, name='receive_message'),
     path('twilio/send_message_to_patient/', send_message_to_patient, name='send_message_to_patient'),
 ]
