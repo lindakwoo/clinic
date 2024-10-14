@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import "./App.css";
 import PatientSignIn from "./components/PatientSignIn";
@@ -14,6 +14,7 @@ import TherapistCreateForm from "./components/TherapistCreateForm";
 import ProtectedRoute from "./protected-route";
 import NavbarWrapper from "./components/navbar/NavbarWrapper";
 import Home from "./components/Home";
+import QrCodeGenerator from "./components/QrCodeGenerator";
 
 function App() {
   const { login } = useContext(AuthContext);
@@ -53,6 +54,7 @@ function App() {
             <Route path='/logout' element={<Logout />} />
             <Route path='/signup/:org' element={<Signup />} />
             <Route path='/send_message/:id' element={<SendMessage />} />
+            <Route path='/qr_code' element={<QrCodeGenerator />} />
             <Route
               path='/appointments/:org'
               element={
