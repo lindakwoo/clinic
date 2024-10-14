@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import "./App.css";
 import PatientSignIn from "./components/PatientSignIn";
 import SendMessage from "./components/SendMessage";
@@ -18,6 +18,21 @@ import QrCodeGenerator from "./components/QrCodeGenerator";
 
 function App() {
   const { login } = useContext(AuthContext);
+
+  const theme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#1976d2",
+      },
+      secondary: {
+        main: "#ff4081",
+      },
+    },
+    typography: {
+      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    },
+  });
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
@@ -43,46 +58,49 @@ function App() {
   }, [login]);
 
   return (
-    <BrowserRouter>
-      <NavbarWrapper />
-      <main>
-        <Box sx={{ mx: { xs: "0", lg: "64px" }, mt: { xs: "0", lg: "32px" } }}>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/patient_sign_in/:org' element={<PatientSignIn />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/logout' element={<Logout />} />
-            <Route path='/signup/:org' element={<Signup />} />
-            <Route path='/send_message/:id' element={<SendMessage />} />
-            <Route path='/qr_code' element={<QrCodeGenerator />} />
-            <Route
-              path='/appointments/:org'
-              element={
-                <ProtectedRoute>
-                  <Appointments />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/therapists/:org'
-              element={
-                <ProtectedRoute>
-                  <Therapists />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/therapists/create'
-              element={
-                <ProtectedRoute>
-                  <TherapistCreateForm />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Box>
-      </main>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <NavbarWrapper />
+        <main>
+          <Box sx={{ mx: { xs: "0", lg: "64px" }, mt: { xs: "0", lg: "32px" } }}>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/patient_sign_in/:org' element={<PatientSignIn />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/logout' element={<Logout />} />
+              <Route path='/signup/:org' element={<Signup />} />
+              <Route path='/send_message/:id' element={<SendMessage />} />
+              <Route path='/qr_code' element={<QrCodeGenerator />} />
+              <Route
+                path='/appointments/:org'
+                element={
+                  <ProtectedRoute>
+                    <Appointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/therapists/:org'
+                element={
+                  <ProtectedRoute>
+                    <Therapists />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/therapists/create'
+                element={
+                  <ProtectedRoute>
+                    <TherapistCreateForm />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Box>
+        </main>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

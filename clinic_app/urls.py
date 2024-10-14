@@ -3,7 +3,6 @@ from .views import (
     therapist_list,
     therapist_detail,
     twilio_status_callback,
-    receive_message,
     patient_detail,
     send_message_to_patient,
     appointment_list,

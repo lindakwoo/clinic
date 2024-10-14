@@ -66,3 +66,15 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212; /* Dark background */
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #ffffff; /* Light text color */
+  }
+}

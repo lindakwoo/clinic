@@ -11,6 +11,7 @@ import {
   InputLabel,
   styled,
   Box,
+  useTheme,
 } from "@mui/material";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css"; // Import styles for the phone input
@@ -19,6 +20,7 @@ import axios from "axios";
 const StyledPhoneInput = styled(PhoneInput)({});
 
 function PatientSignIn() {
+  const theme = useTheme();
   const { org } = useParams();
   const [firstInitial, setFirstInitial] = useState("");
   const [lastInitial, setLastInitial] = useState("");
@@ -82,6 +84,10 @@ function PatientSignIn() {
               onChange={(e) => {
                 if (e.target.value.length <= 1) setFirstInitial(e.target.value);
               }}
+              sx={{
+                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
+                color: theme.palette.text.primary,
+              }}
             />
             <TextField
               label='Last Initial'
@@ -91,6 +97,10 @@ function PatientSignIn() {
               value={lastInitial}
               onChange={(e) => {
                 if (e.target.value.length <= 1) setLastInitial(e.target.value);
+              }}
+              sx={{
+                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
+                color: theme.palette.text.primary,
               }}
             />
             <StyledPhoneInput
@@ -128,6 +138,10 @@ function PatientSignIn() {
                   setTherapist(e.target.value);
                 }}
                 label='Select a Therapist'
+                sx={{
+                  backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
+                  color: theme.palette.text.primary,
+                }}
               >
                 {therapists.map((therapist) => (
                   <MenuItem key={therapist.id} value={therapist.id}>
