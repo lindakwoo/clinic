@@ -28,7 +28,7 @@ function TherapistCreateForm() {
       setLastName("");
       setPhoneNumber("");
       setIsCreated(true);
-      navigate("/therapists/uplift");
+      navigate("/therapists");
     } catch (error) {
       console.error("There was an error creating the therapist!", error);
     }
