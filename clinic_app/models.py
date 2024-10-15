@@ -24,7 +24,6 @@ class Therapist(models.Model):
     organization_name = models.CharField(max_length=100, blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapists', default=1)
 
-
     def __str__(self):
         return self.last_name
 
@@ -32,7 +31,7 @@ class Therapist(models.Model):
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     therapist = models.ForeignKey(Therapist, on_delete=models.SET_NULL, null=True)
-    therapist_name = models.CharField(max_length=200, blank=True, null=True)
+    therapist_name = models.CharField(max_length=200, blank=True, null=True) # Store therapist's name for display in case the therapist gets deleted
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     organization_name = models.CharField(max_length=100, blank=True, null=True)

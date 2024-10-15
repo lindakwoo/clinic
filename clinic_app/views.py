@@ -137,6 +137,7 @@ def twilio_status_callback(request):
 @csrf_exempt
 @require_http_methods(["GET"])
 def therapist_list_for_patients(request, organization_name):
+    # This endpoint gets all therapists associated with the organization_name that is in the url. (no auth needed)
     try:
         therapists = Therapist.objects.filter(organization_name=organization_name)
         return JsonResponse(
@@ -151,6 +152,7 @@ def therapist_list_for_patients(request, organization_name):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def therapist_list_for_user(request):
+    # This endpoint gets all therapists created by the logged in user. (auth needed cuz there is ability to delete and create therapists on this page
     try:
         logger.debug(f"Request META: {request.META}")
         auth_header = request.META.get('HTTP_AUTHORIZATION', None)
@@ -265,6 +267,9 @@ def patient_detail(request, pk):
 @permission_classes([IsAuthenticated])
 def appointment_list(request):
     try:
+        # This endpoint gets all appointments associated with the logged in user's organization.
+        #  cannot simply get request.user.oragnization_name because the django admin panel user is interfering with the logged in user.
+        #  instead we will make a call to the other microservice to get the requested user and their profile and associated org_name
         auth_header = request.META.get('HTTP_AUTHORIZATION', None)
         if not auth_header:
             return JsonResponse({'error': 'Authorization header not provided.'}, status=403)
