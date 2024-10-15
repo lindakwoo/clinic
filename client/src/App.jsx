@@ -69,11 +69,11 @@ function App() {
               <Route path='/patient_sign_in/:org' element={<PatientSignIn />} />
               <Route path='/login' element={<Login />} />
               <Route path='/logout' element={<Logout />} />
-              <Route path='/signup/:org' element={<Signup />} />
+              {/* <Route path='/signup/:org' element={<Signup />} /> */}
               <Route path='/send_message/:id' element={<SendMessage />} />
               <Route path='/qr_code' element={<QrCodeGenerator />} />
               <Route
-                path='/appointments/:org'
+                path='/appointments'
                 element={
                   <ProtectedRoute>
                     <Appointments />
@@ -81,7 +81,7 @@ function App() {
                 }
               />
               <Route
-                path='/therapists/:org'
+                path='/therapists'
                 element={
                   <ProtectedRoute>
                     <Therapists />

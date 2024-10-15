@@ -26,7 +26,7 @@ function Login() {
         }
       );
       login(response.data.access, response.data.refresh, response.data.user);
-      navigate("/appointments/uplift");
+      navigate("/appointments");
     } catch (error) {
       setErrorMessage("Error logging in: " + error.response.data.detail);
     }

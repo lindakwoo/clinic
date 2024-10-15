@@ -16,17 +16,16 @@ import {
   Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Therapists = () => {
   const navigate = useNavigate();
-  const { org } = useParams();
   const [therapists, setTherapists] = useState([]);
   const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
 
   const fetchTherapists = async () => {
     try {
-      const url = `${apiUrl}/api/therapists/${org}`;
+      const url = `${apiUrl}/api/therapists/`;
       const options = { method: "GET" };
       const response = await customFetch(url, options);
       setTherapists(response.therapists);

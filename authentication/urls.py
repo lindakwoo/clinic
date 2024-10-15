@@ -10,4 +10,5 @@ urlpatterns = [
     # path('logout/', views.logout, name='logout'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('org_name/', views.get_user_org_name, name='get_user_org_name'),
+    path('user/', views.get_user, name='get_user'),
 ]

@@ -69,16 +69,16 @@ const Navbar = () => {
             display: { xs: "none", md: "block" },
           }}
         >
-          {isAuth && <DesktopMenuItem path='/appointments/uplift' onClickHandler={() => {}} title='Appointments' />}
-          {isAuth && <DesktopMenuItem path='/therapists/uplift' onClickHandler={() => {}} title='Therapists' />}
-          {!isAuth && (
+          {isAuth && <DesktopMenuItem path='/appointments' onClickHandler={() => {}} title='Appointments' />}
+          {isAuth && <DesktopMenuItem path='/therapists' onClickHandler={() => {}} title='Therapists' />}
+          {/* {!isAuth && (
             <DesktopMenuItem
               path='/signup/uplift'
               onClickHandler={() => setIsSignup(true)}
               title='Signup'
               highlight={false}
             />
-          )}
+          )} */}
           {!isAuth && (
             <DesktopMenuItem path='/login' onClickHandler={() => setIsLogin(true)} title='Login' highlight={false} />
           )}
@@ -90,13 +90,11 @@ const Navbar = () => {
           </IconButton>
         </Box>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-          {isAuth && (
-            <MobileMenuItem path='/appointments/uplift' onClickHandler={handleMenuClose} title='Appointments' />
-          )}
-          {isAuth && <MobileMenuItem path='/therapists/uplift' onClickHandler={handleMenuClose} title='Therapists' />}
-          {!isAuth && (
+          {isAuth && <MobileMenuItem path='/appointments' onClickHandler={handleMenuClose} title='Appointments' />}
+          {isAuth && <MobileMenuItem path='/therapists' onClickHandler={handleMenuClose} title='Therapists' />}
+          {/* {!isAuth && (
             <MobileMenuItem path='/signup/uplift' onClickHandler={handleSignup} title='Signup' highlight={false} />
-          )}
+          )} */}
           {!isAuth && <MobileMenuItem path='/login' onClickHandler={handleLogin} title='Login' highlight={false} />}
           {isAuth && <MobileMenuItem path='/logout' onClickHandler={handleLogout} title='Logout' highlight={false} />}
         </Menu>

@@ -18,11 +18,9 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
 import customFetch from "./fetchWrapper";
 
 const Appointments = () => {
-  const { org } = useParams();
   const [appointments, setAppointments] = useState([]);
   const [filterDate, setFilterDate] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
@@ -32,7 +30,7 @@ const Appointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const url = `${apiUrl}/api/appointments/${org}/`;
+      const url = `${apiUrl}/api/appointments/`;
       const options = { method: "GET" };
       const response = await customFetch(url, options);
       setAppointments(response.appointments);

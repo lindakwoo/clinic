@@ -136,9 +136,38 @@ def twilio_status_callback(request):
 
 @csrf_exempt
 @require_http_methods(["GET"])
-def therapist_list(request, organization_name):
+def therapist_list_for_patients(request, organization_name):
     try:
         therapists = Therapist.objects.filter(organization_name=organization_name)
+        return JsonResponse(
+            {"therapists": therapists}, encoder=TherapistEncoder, safe=False
+        )
+    except Exception as e:
+        return JsonResponse(
+            {"message": f"Therapists not retreived: {str(e)}"}, status=400
+        )
+
+@csrf_exempt
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def therapist_list_for_user(request):
+    try:
+        logger.debug(f"Request META: {request.META}")
+        auth_header = request.META.get('HTTP_AUTHORIZATION', None)
+        if not auth_header:
+            return JsonResponse({'error': 'Authorization header not provided.'}, status=403)
+
+        # The token should be in the format "Bearer <token>"
+        token = auth_header.split(' ')[1] if ' ' in auth_header else None
+        if not token:
+            return JsonResponse({'error': 'Token not provided.'}, status=403)
+        auth_service_url = 'https://uplift-clinic-677edaaf8da8.herokuapp.com/user/'
+        # auth_service_url = 'http://localhost:8000/user/'
+        response = requests.get(auth_service_url, headers={'Authorization': f'Bearer {token}'})
+        if response.status_code != 200:
+            return Response({'error': 'Failed to retrieve user.'}, status=status.HTTP_400_BAD_REQUEST)
+        user_id = response.json().get('user_id')
+        therapists = Therapist.objects.filter(created_by__id=user_id)
         return JsonResponse(
             {"therapists": therapists}, encoder=TherapistEncoder, safe=False
         )
@@ -175,6 +204,7 @@ def therapist_create(request):
         if not token:
             return JsonResponse({'error': 'Token not provided.'}, status=403)
         auth_service_url = 'https://uplift-clinic-677edaaf8da8.herokuapp.com/org_name/'
+        # auth_service_url = 'http://localhost:8000/org_name/'
         response = requests.get(auth_service_url, headers={'Authorization': f'Bearer {token}'})
         if response.status_code != 200:
             return Response({'error': 'Failed to retrieve profile.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -233,8 +263,22 @@ def patient_detail(request, pk):
 @csrf_exempt
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def appointment_list(request, organization_name):
+def appointment_list(request):
     try:
+        auth_header = request.META.get('HTTP_AUTHORIZATION', None)
+        if not auth_header:
+            return JsonResponse({'error': 'Authorization header not provided.'}, status=403)
+
+        # The token should be in the format "Bearer <token>"
+        token = auth_header.split(' ')[1] if ' ' in auth_header else None
+        if not token:
+            return JsonResponse({'error': 'Token not provided.'}, status=403)
+        auth_service_url = 'https://uplift-clinic-677edaaf8da8.herokuapp.com/org_name/'
+        # auth_service_url = 'http://localhost:8000/org_name/'
+        response = requests.get(auth_service_url, headers={'Authorization': f'Bearer {token}'})
+        if response.status_code != 200:
+            return Response({'error': 'Failed to retrieve profile.'}, status=status.HTTP_400_BAD_REQUEST)
+        organization_name = response.json().get('organization_name')
         appointments = Appointment.objects.filter(organization_name=organization_name).order_by("date", "-time")
         return JsonResponse(
             {"appointments": appointments}, encoder=AppointmentEncoder, safe=False

@@ -2,6 +2,7 @@
 
 from django.db import IntegrityError
 from rest_framework import status
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -12,7 +13,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import serializers
 from .models import Profile
 import logging
-logger = logging.getLogger(__name__)
+from common.json import ModelEncoder
+logger = logging.getLogger('authentication')
+
+
+class UserEncoder(ModelEncoder):
+    model = User
+    properties = ["id", "username"]
 
 
 class HomeView(APIView):
@@ -83,10 +90,14 @@ def signup(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
+    logger.debug("Login view accessed.")
     username = request.data.get('username')
     password = request.data.get('password')
     user = authenticate(username=username, password=password)
+    logger.debug(f"Current user: {user}")
     if user is not None:
+        logger.debug(f"Current user: {user}")
+        request.session.flush()
         refresh = RefreshToken.for_user(user)
         return Response({
             'refresh': str(refresh),
@@ -128,3 +139,15 @@ def get_user_org_name(request):
         })
     except Profile.DoesNotExist:
         return Response({'error': 'Profile not found.'}, status=404)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user(request):
+    user = request.user
+    try:
+        return Response({
+            'user_id': user.id
+        })
+    except Profile.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=404)
