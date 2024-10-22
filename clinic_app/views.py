@@ -79,10 +79,11 @@ def patient_create(request):
 
             message_url = f"https://uplift-clinic2.web.app/send_message/{patient.id}/"
             short_url = shorten_url(message_url)
-            message_body = (
-                f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
-                f"Click this link to send a message to the patient: {short_url}"
-            )
+            # message_body = (
+            #     f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
+            #     f"Click this link to send a message to the patient: {short_url}"
+            # )
+            message_body =f"Patient {patient.first_initial}.{patient.last_initial}. with patient id of {patient.id} has arrived.\n"
             twilio_client.messages.create(
                 body=message_body,
                 from_=TWILIO_PHONE_NUMBER,
