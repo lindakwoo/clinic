@@ -78,12 +78,12 @@ def patient_create(request):
             therapist_phone_number = therapist.phone_number if isinstance(therapist.phone_number, str) else str(therapist.phone_number)
 
             message_url = f"https://uplift-clinic2.web.app/send_message/{patient.id}/"
-            short_url = shorten_url(message_url)
-            # message_body = (
-            #     f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
-            #     f"Click this link to send a message to the patient: {short_url}"
-            # )
-            message_body =f"Client {patient.first_initial}{patient.last_initial} has arrived\n"
+            # short_url = shorten_url(message_url)
+            message_body = (
+                f"Client {patient.first_initial}{patient.last_initial} has arrived.\n"
+                f"Click this link to send a message to the client: {message_url}"
+            )
+            # message_body =f"Client {patient.first_initial}{patient.last_initial} has arrived\n"
             twilio_client.messages.create(
                 body=message_body,
                 from_=TWILIO_PHONE_NUMBER,
