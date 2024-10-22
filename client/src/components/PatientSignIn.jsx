@@ -34,6 +34,7 @@ function PatientSignIn() {
     try {
       const response = await axios.get(`${apiUrl}/api/therapists/${org}`);
       setTherapists(response.data.therapists);
+      console.log("Therapists:", response.data.therapists);
     } catch (error) {
       console.error("There was an error fetching the therapists!", error);
     }

@@ -4,9 +4,10 @@ import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import axios from "axios";
 
 const SendMessage = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
   const [patient, setPatient] = useState(null);
   const [message, setMessage] = useState("");
+  const [patientId, setPatientId] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -15,8 +16,12 @@ const SendMessage = () => {
   console.log(apiUrl);
 
   const fetchPatient = async () => {
+    if (!patientId) {
+      setError("Please enter a Patient ID.");
+      return;
+    }
     try {
-      const response = await axios.get(`${apiUrl}/api/patients/${id}/`);
+      const response = await axios.get(`${apiUrl}/api/patients/${patientId}/`);
 
       console.log(response.data);
       setPatient(response.data);
@@ -48,9 +53,9 @@ const SendMessage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchPatient();
-  }, []);
+  // useEffect(() => {
+  //   fetchPatient();
+  // }, []);
 
   return (
     <Container sx={{ p: { xs: "0", lg: "16px" } }} maxWidth='sm'>
@@ -58,7 +63,32 @@ const SendMessage = () => {
         <img src='/images/uplift4FINAL.jpg' alt='uplift logo' style={{ maxWidth: "100%", height: "auto" }} />
       </Box>
       <Box mt={4} p={2} border={1} borderColor='grey.300' borderRadius={2}>
-        {patient ? (
+        {!patient ? (
+          // Only show Patient ID input if patient is not fetched yet
+          <>
+            <Typography variant='h6' gutterBottom>
+              Enter Patient ID to Send a Text Message.
+            </Typography>
+            <TextField
+              label='Patient ID'
+              type='number'
+              value={patientId}
+              onChange={(e) => setPatientId(e.target.value)}
+              variant='outlined'
+              size='small'
+              sx={{ mb: 2 }}
+            />
+            <Button variant='contained' color='primary' onClick={fetchPatient} fullWidth>
+              Fetch Patient
+            </Button>
+            {error && (
+              <Typography color='error' variant='body2' sx={{ mt: 2 }}>
+                {error}
+              </Typography>
+            )}
+          </>
+        ) : (
+          // Once the patient is fetched, show the rest of the form
           <>
             <Typography variant='h6' gutterBottom>
               Send a Text Message to {patient.first_initial}.{patient.last_initial}.
@@ -91,11 +121,9 @@ const SendMessage = () => {
               sx={{ mt: 2 }}
               fullWidth
             >
-              {isSending ? "Sending..." : "Send Message!!!!"}
+              {isSending ? "Sending..." : "Send Message"}
             </Button>
           </>
-        ) : (
-          <Typography>Loading patient information...</Typography>
         )}
       </Box>
     </Container>

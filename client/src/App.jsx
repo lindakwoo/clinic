@@ -70,7 +70,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/logout' element={<Logout />} />
               {/* <Route path='/signup/:org' element={<Signup />} /> */}
-              <Route path='/send_message/:id' element={<SendMessage />} />
+              <Route path='/send_message' element={<SendMessage />} />
               <Route path='/qr_code' element={<QrCodeGenerator />} />
               <Route
                 path='/appointments'
