@@ -83,7 +83,7 @@ def patient_create(request):
             #     f"Patient {patient.first_initial}.{patient.last_initial}. has arrived.\n"
             #     f"Click this link to send a message to the patient: {short_url}"
             # )
-            message_body =f"Patient {patient.first_initial}.{patient.last_initial}. with patient id of {patient.id} has arrived.\n"
+            message_body =f"Client {patient.first_initial}{patient.last_initial} has arrived\n"
             twilio_client.messages.create(
                 body=message_body,
                 from_=TWILIO_PHONE_NUMBER,

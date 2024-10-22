@@ -171,8 +171,8 @@ function PatientSignIn() {
             textAlign: "center",
           }}
         >
-          <Typography variant='h5'>You have signed in successfully!</Typography>
-          <Typography variant='body1'>Your therapist will contact you shortly.</Typography>
+          <Typography variant='h5'>You are checked in!</Typography>
+          <Typography variant='body1'>Please take a seat, your therapist will be with you shortly</Typography>
         </Box>
       ) : null}
     </Container>
