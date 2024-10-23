@@ -66,7 +66,7 @@ function App() {
           <Box sx={{ mx: { xs: "0", lg: "64px" }, mt: { xs: "0", lg: "32px" } }}>
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/patient_sign_in/:org' element={<PatientSignIn />} />
+              <Route path='/client_check_in/:org' element={<PatientSignIn />} />
               <Route path='/login' element={<Login />} />
               <Route path='/logout' element={<Logout />} />
               {/* <Route path='/signup/:org' element={<Signup />} /> */}

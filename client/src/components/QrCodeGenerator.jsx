@@ -24,7 +24,7 @@ const QrCodeGenerator = () => {
       <div className='qrcode__container--parent' ref={qrCodeRef}>
         <div className='qrcode__download'>
           <div className='qrcode__image'>
-            <QRCode value='https://uplift-clinic2.web.app/patient_sign_in/uplift' size={300} />
+            <QRCode value='https://uplift-clinic2.web.app/client_check_in/uplift' size={300} />
           </div>
           <button onClick={downloadQRCode}>Download QR Code</button>
         </div>
