@@ -16,8 +16,6 @@ const SendMessage = () => {
   const fetchPatient = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/patients/${id}/`);
-
-      console.log(response.data);
       setPatient(response.data);
     } catch (error) {
       console.error("There was an error fetching the patient!", error);

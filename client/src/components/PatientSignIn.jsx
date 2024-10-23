@@ -10,15 +10,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  styled,
   Box,
   useTheme,
 } from "@mui/material";
-import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css"; // Import styles for the phone input
 import axios from "axios";
-
-const StyledPhoneInput = styled(PhoneInput)({});
 
 function PatientSignIn() {
   const theme = useTheme();
@@ -37,7 +33,6 @@ function PatientSignIn() {
     try {
       const response = await axios.get(`${apiUrl}/api/therapists/${org}`);
       setTherapists(response.data.therapists);
-      console.log("Therapists:", response.data.therapists);
     } catch (error) {
       console.error("There was an error fetching the therapists!", error);
     }
@@ -56,7 +51,6 @@ function PatientSignIn() {
       rawNumber = rawNumber.substring(phoneNumber.startsWith("+1") ? 2 : 1); // Remove leading characters
     }
     const formattedNumber = `+1${rawNumber}`; // Prepend "+1"
-    console.log(formattedNumber);
 
     // Validate the phone number
     if (!isValidPhoneNumber(formattedNumber)) {
@@ -66,7 +60,6 @@ function PatientSignIn() {
       setPhoneNumberError("");
     }
     try {
-      console.log("Phone number type:", typeof formattedNumber);
       const response = await axios.post(`${apiUrl}/api/patients/`, {
         first_initial: firstInitial,
         last_initial: lastInitial,
@@ -74,7 +67,6 @@ function PatientSignIn() {
         organization_name: org,
         therapist: therapist,
       });
-      console.log("Patient created:", response.data);
       setFirstInitial("");
       setLastInitial("");
       setPhoneNumber("");
