@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import {
   TextField,
   Button,
@@ -28,6 +29,8 @@ function PatientSignIn() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [therapists, setTherapists] = useState([]);
   const [therapist, setTherapist] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [error, setError] = useState("");
 
   const apiUrl = import.meta.env.VITE_APP_API_URL || "http://localhost:8000";
   const fetcchTherapists = async () => {
@@ -40,14 +43,34 @@ function PatientSignIn() {
     }
   };
 
+  const handlePhoneChange = (e) => {
+    // Keep the value as-is for display purposes
+    const inputValue = e.target.value.trim();
+    setPhoneNumber(inputValue);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let rawNumber = phoneNumber.replace(/[^0-9]/g, ""); // Remove everything except digits
+    if (phoneNumber.startsWith("+1") || phoneNumber.startsWith("1")) {
+      rawNumber = rawNumber.substring(phoneNumber.startsWith("+1") ? 2 : 1); // Remove leading characters
+    }
+    const formattedNumber = `+1${rawNumber}`; // Prepend "+1"
+    console.log(formattedNumber);
+
+    // Validate the phone number
+    if (!isValidPhoneNumber(formattedNumber)) {
+      setPhoneNumberError("Please enter a valid phone number. Example: 415 555 2671");
+      return;
+    } else {
+      setPhoneNumberError("");
+    }
     try {
-      console.log("Phone number type:", typeof phoneNumber);
+      console.log("Phone number type:", typeof formattedNumber);
       const response = await axios.post(`${apiUrl}/api/patients/`, {
         first_initial: firstInitial,
         last_initial: lastInitial,
-        phone_number: phoneNumber,
+        phone_number: formattedNumber,
         organization_name: org,
         therapist: therapist,
       });
@@ -57,7 +80,8 @@ function PatientSignIn() {
       setPhoneNumber("");
       setIsSignedIn(true);
     } catch (error) {
-      console.error("There was an error creating the patient!", error);
+      console.error("There was an error creating the client!", error);
+      setError("Failed to check in client");
     }
   };
 
@@ -73,10 +97,11 @@ function PatientSignIn() {
       {!isSignedIn && therapists.length > 0 ? (
         <>
           <Typography variant='h4' gutterBottom align='center'>
-            Patient Sign In
+            Client Check In
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
+              required
               label='First Initial'
               variant='outlined'
               fullWidth
@@ -91,6 +116,7 @@ function PatientSignIn() {
               }}
             />
             <TextField
+              required
               label='Last Initial'
               variant='outlined'
               fullWidth
@@ -104,31 +130,28 @@ function PatientSignIn() {
                 color: theme.palette.text.primary,
               }}
             />
-            <StyledPhoneInput
-              international
-              defaultCountry='US'
-              value={phoneNumber}
-              onChange={setPhoneNumber}
-              placeholder='Enter phone number'
+            <TextField
+              label='Phone Number'
+              required
+              variant='outlined'
+              type='tel'
+              fullWidth
+              margin='normal'
+              value={phoneNumber.replace("+1", "")} // Display without +1
+              onChange={handlePhoneChange}
+              placeholder='(999) 999-9999'
               sx={{
-                width: "100%",
-                margin: "16px 0",
-                height: "56px",
-                "& input": {
-                  height: "50px",
-                  borderRadius: "4px",
-                  border: "1px solid #ced4da",
-                  //   padding: "0.375rem 0.75rem",
-                  fontSize: "1rem",
-                  lineHeight: "1.5",
-                  color: "#495057",
-                  backgroundColor: "#fff",
-                  backgroundClip: "padding-box",
-                  transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
-                },
+                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
+                color: theme.palette.text.primary,
               }}
             />
-            <FormControl sx={{ mb: "16px" }} fullWidth>
+
+            {phoneNumberError && (
+              <Typography color='error' variant='body2' sx={{ my: 1 }}>
+                {phoneNumberError}
+              </Typography>
+            )}
+            <FormControl sx={{ my: "16px" }} fullWidth>
               <InputLabel id='therapist'>Select a Therapist</InputLabel>
               <Select
                 labelId='therapist-label'
@@ -175,6 +198,11 @@ function PatientSignIn() {
           <Typography variant='body1'>Please take a seat, your therapist will be with you shortly</Typography>
         </Box>
       ) : null}
+      {error && (
+        <Typography color='error' variant='body2' sx={{ mt: 1 }}>
+          {error}
+        </Typography>
+      )}
     </Container>
   );
 }
