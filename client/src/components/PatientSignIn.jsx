@@ -144,7 +144,7 @@ function PatientSignIn() {
               </Typography>
             )}
             <FormControl sx={{ my: "16px" }} fullWidth>
-              <InputLabel id='therapist'>Select a Therapist</InputLabel>
+              <InputLabel id='therapist'>Select Your Therapist</InputLabel>
               <Select
                 labelId='therapist-label'
                 value={therapist}
